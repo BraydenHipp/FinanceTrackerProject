@@ -1,5 +1,3 @@
-import customtkinter
-
 
 def main():
 
