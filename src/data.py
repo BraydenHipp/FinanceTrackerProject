@@ -1,17 +1,76 @@
+
 import pandas as pd
 
-
-# Use a dictionary to import data. Will go like:
-#  Type of transaction (Deposit/Withdrawl),
-#  Amount,
-#  Category(Housing/Utilities, Food/Dining, Transportation, Medical, Entertainment/Leisure, Personal Care/Shopping), Other, N/A (Deposits)
-#  Date (mm/dd/yy)
-
-data  = pd.DataFrame({
-    'type' : ['deposit', 'withdrawl', 'withdrawl'],
-    'amount' : [20.10, 7.10, 29.01], 
-    'category' : ['N/A', 'transportation', 'personal care/shopping'],
-    'data' : ['04/28/2006', '11/19/2022', '01/20/2019']
-        })
+class manipulateData:
     
-data.to_csv('output.csv', index = False)
+    def __init__(self):
+        pass
+    
+    # This function reads the output.csv file and computes the balance
+    def getTotal(self):
+        
+        # the .. tells python to go up one level out of the src directory to look for the test folder
+        df = pd.read_csv("../test/data_small.csv") # turns the csv file into a data frame
+        
+        data = df.to_dict(orient = "records")
+        
+        total = 0
+        
+        for transaction in data:
+            transaction_type = transaction["type"]
+            amount = transaction["amount"]
+            if (transaction_type == "deposit"):
+                total += amount
+            elif (transaction_type == "withdrawal"):
+                total -= amount
+            
+        return round(total, 2)
+    
+    
+    # TODO Write a method to count the total amounts for each of the categories
+    
+    def count_total():
+        df = pd.read_csv("../test/output.csv", keep_default_na = False)
+        
+        data = df.to_dict(orient = "records")
+        # Define the dictoinary
+        frequency = {
+            "Housing/Utilities" : 0,
+            "Food/Dining" : 0,
+            "Transportation" : 0,
+            "Medical" : 0,
+            "Entertainment/Leisure" : 0,
+            "Personal Care/Shopping" : 0,
+            "Other" : 0,
+            "N/A" : 0
+        }
+        
+        for observation in data:
+            frequency[observation] += 1
+            
+        return frequency
+    
+    
+    def add_observation(self, type_t, amount_t, category_t, date_t):
+        # keep_default_na makes it so it doesn't remove the N/A in data
+        df = pd.read_csv("../test/output.csv", keep_default_na = False)
+        
+        # This actually creates a list of dictionaries
+        data = df.to_dict(orient = "records")
+        
+        # asumes all data is valid
+        new_dict = {
+            "type" : type_t,
+            "amount" : round(amount_t, 2),
+            "category" : category_t,
+            "date" : date_t
+        }
+        
+        data.append(new_dict)
+        
+        df = pd.DataFrame(data)
+        df.to_csv("../test/output.csv", index=False)
+        
+        return data
+    
+    
