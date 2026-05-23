@@ -38,7 +38,6 @@ class NewObservationFrame(customtkinter.CTkFrame):
     def get_amount(self):
         return self.amount_entry.amount_variable.get()
 
-            
     
     def get_category(self):
         return self.category_dropdown.category_variable.get()
@@ -55,28 +54,69 @@ class NewObservationFrame(customtkinter.CTkFrame):
         new_observation.append(self.get_category())
         
         
-        
+        invalid_amount: bool = True
         unprocessed_amount = self.get_amount()
         try:
             processed_amount = float(unprocessed_amount)
             round(processed_amount, 2)
             new_observation.append(processed_amount)
         except ValueError:
-            comp.InvalidAmountPopUp(self)
+            invalid_amount = False
+            comp.InvalidEntryPopUp(self, "Amount")
+            return
             
         # TODO need to add the date parsing which is gonna suck
         
+        unprocessed_date: str = self.get_date()
+        
+        # Needs to make sure length of the date is 10 and that it contains 2 slashes
+        
+        valid_date: bool = True
+        
+        if len(unprocessed_date) != 10:
+            valid_date = False
+            comp.InvalidEntryPopUp(self, "Date")
+            return
             
-
-        
-
-        
-            
-            
-        
-        
+        # Count the number of slashes
+        slash_count: int = 0
+        for i in range(0, len(unprocessed_date) - 1):
+            if unprocessed_date[i] == '/':
+                slash_count += 1
                 
-         
+        if slash_count != 2:
+            valid_date = False
+            comp.InvalidEntryPopUp(self, "Date")
+            return
+        
+        # Step 1 get the chars at index [0, 1] [3, 4] and [6, 7, 8, 9]
+        str_day: str = ""
+        str_month: str = ""
+        str_year: str = ""
+        try:
+            str_day = unprocessed_date[0] + unprocessed_date[1]
+            str_month = unprocessed_date[3] + unprocessed_date[4]
+            str_year = unprocessed_date[6] + unprocessed_date[7] + unprocessed_date[8] + unprocessed_date[9]
+        except IndexError:
+            comp.InvalidEntryPopUp(self, "Date")
+            
+        
+        # Check to make sure they are all numbers
+        int_day: int
+        int_month: int
+        int_year: int
+        try:
+            int(str_day)
+            int(str_month)
+            int(str_year)
+        except ValueError:
+            valid_date = False
+            comp.InvalidEntryPopUp(self, "Date")
+            
+        # Check that each of the numbers are valid 
+        
+            
+
 #-----------------------------------------------------------------------------------------------------------#        
             
 class BalanceFrame(customtkinter.CTkFrame):

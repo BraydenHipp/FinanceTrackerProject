@@ -79,8 +79,8 @@ class AddObservationButton(customtkinter.CTkButton):
         
 #-----------------------------------------------------------------------------------------------------------#
 
-class InvalidAmountPopUp(customtkinter.CTkToplevel):
-    def __init__(self, master):
+class InvalidEntryPopUp(customtkinter.CTkToplevel):
+    def __init__(self, master, type): # Type is a string indicating which part of the observation is wrong
         super().__init__(master)
         
         self.title("Error Message")
@@ -91,10 +91,14 @@ class InvalidAmountPopUp(customtkinter.CTkToplevel):
         
         self.after(200, lambda: self.focus())
         
-        label = customtkinter.CTkLabel(self, text = "Please Enter A Valid Amount")
+        label = customtkinter.CTkLabel(self, text = "Please Enter A Valid " + type)
         label.pack(pady = 20)
         
         close_btn = customtkinter.CTkButton(self, text="Dismiss", command = self.destroy)
         close_btn.pack(pady = 20)
         
+        
+#-----------------------------------------------------------------------------------------------------------#
+
+
         
