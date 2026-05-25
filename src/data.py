@@ -29,12 +29,12 @@ class manipulateData:
     
     # TODO Write a method to count the total amounts for each of the categories
     
-    def count_total():
+    def count_total(self):
         df = pd.read_csv("../test/output.csv", keep_default_na = False)
         
         data = df.to_dict(orient = "records")
         # Define the dictoinary
-        frequency = {
+        frequency: dict = {
             "Housing/Utilities" : 0,
             "Food/Dining" : 0,
             "Transportation" : 0,
@@ -59,7 +59,7 @@ class manipulateData:
         data = df.to_dict(orient = "records")
         
         # asumes all data is valid
-        new_dict = {
+        new_dict: dict = {
             "type" : type_t,
             "amount" : round(amount_t, 2),
             "category" : category_t,

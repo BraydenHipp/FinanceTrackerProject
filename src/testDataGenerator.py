@@ -13,13 +13,14 @@ class Generator:
     
     
 
-    months = ["January", "Febuary", "March", "April", "May", "June",
-               "July", "July", "August" , "September", "October", "November", "December"]
+    months = ["January", "February", "March", "April", "May", "June",
+               "July", "August" , "September", "October", "November", "December"]
 
     
     # TODO Change it so the months are numbers
+    
     months_to_days = {"January" : 31, 
-                      "Febuary" : 28,
+                      "February" : 28,
                       "March" : 31,
                       "April" : 30,
                       "May" : 31,
