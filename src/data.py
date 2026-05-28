@@ -1,5 +1,6 @@
-
+import components as comp
 import pandas as pd
+from testDataGenerator import Generator as TGD
 
 class manipulateData:
     
@@ -35,7 +36,7 @@ class manipulateData:
         data = df.to_dict(orient = "records")
         # Define the dictoinary
         frequency: dict = {
-            "Housing/Utilities" : 0,
+        "Housing/Utilities" : 0,
             "Food/Dining" : 0,
             "Transportation" : 0,
             "Medical" : 0,
@@ -72,5 +73,112 @@ class manipulateData:
         df.to_csv("../test/output.csv", index=False)
         
         return data
+    
+    # TODO add a filepath argument so that you can ask for one on start up
+    def read_csv(self):
+        
+        df = pd.read_csv("../test/output.csv") # turns the csv file into a data frame
+        
+        data: list = df.to_dict(orient = "records") # converts the csv to a list containing all of the observations
+        
+        all_transactions: str = ""
+        
+        for transaction in data:
+            type_t: str = transaction["type"]
+            amount: str = str(transaction["amount"])
+            category: str = str(transaction["category"])
+            date: str = transaction["date"]
+            
+            all_transactions += type_t + ", " +  amount + ", " + category + ", " + date +  "\n"
+        
+        return all_transactions
+    
+    def get_new_observation_data(self, type_t, amount, category, date, parent_ui):
+
+        unprocessed_amount = amount
+        try:
+            processed_amount = float(unprocessed_amount)
+            processed_amount = round(processed_amount, 2)
+        except ValueError:
+            comp.InvalidEntryPopUp(parent_ui, "Amount")
+            return
+            
+        # TODO need to add the date parsing which is gonna suck
+        
+        unprocessed_date: str = date
+        
+        # Needs to make sure length of the date is 10 and that it contains 2 slashes
+        
+        
+        if len(unprocessed_date) != 10:
+            comp.InvalidEntryPopUp(parent_ui, "Date")
+            return
+            
+        # Count the number of slashes
+        slash_count: int = 0
+        for i in range(0, len(unprocessed_date) - 1):
+            if unprocessed_date[i] == '/':
+                slash_count += 1
+                
+        if slash_count != 2:
+            comp.InvalidEntryPopUp(parent_ui, "Date")
+            return
+        
+        # Step 1 get the chars at index [0, 1] [3, 4] and [6, 7, 8, 9]
+        str_day: str = ""
+        str_month: str = ""
+        str_year: str = ""
+        try:
+            str_month = unprocessed_date[0] + unprocessed_date[1]
+            str_day = unprocessed_date[3] + unprocessed_date[4]
+            str_year = unprocessed_date[6] + unprocessed_date[7] + unprocessed_date[8] + unprocessed_date[9]
+        except IndexError:
+            comp.InvalidEntryPopUp(parent_ui, "Date")
+            return
+            
+            
+        
+        # Check to make sure they are all numbers
+        int_day: int = 0
+        int_month: int = 0
+        int_year: int = 0
+        try:
+            int_day = int(str_day)
+            int_month = int(str_month)
+            int_year = int(str_year)
+        except ValueError:
+            comp.InvalidEntryPopUp(parent_ui, "Date")
+            return
+            
+        # Check that each of the numbers are valid 
+        
+        # Make sure that month is 1-12
+
+        if int_month > 12 or int_month < 1:
+            comp.InvalidEntryPopUp(parent_ui, "Date")
+            return
+        
+        # Dictionary mapping months to the possible number of days
+        months_to_days: dict = TGD.months_to_days
+        months: list = TGD.months
+        
+        current_month: str = months[int_month - 1]
+        max_days: int = months_to_days[current_month]
+        
+        
+        
+        if int_day > max_days or int_day < 1:
+            comp.InvalidEntryPopUp(parent_ui, "Date")
+            return
+        
+        if int_year > 9999 or int_year < 1000:
+            comp.InvalidEntryPopUp(parent_ui, "Date")
+            return
+        
+        # Can use self because it is a method of the same class
+        self.add_observation(type_t, processed_amount, category, unprocessed_date)
+        
+        comp.SuccessfulEntry(parent_ui)
+    
     
     

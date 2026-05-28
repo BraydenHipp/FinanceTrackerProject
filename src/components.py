@@ -1,6 +1,6 @@
 import customtkinter
 import data
-
+import pandas as pd
 class TotalBalanceLabel(customtkinter.CTkLabel): # inheritance (new label has all features of regular label)
     def __init__(self, master):
         super().__init__(master) # this initializes the parent class label
@@ -11,6 +11,7 @@ class TotalBalanceLabel(customtkinter.CTkLabel): # inheritance (new label has al
 class TotalDisplay(customtkinter.CTkLabel):
     def __init__(self, master):
         super().__init__(master)
+        
         
         extractor = data.manipulateData()
         total = extractor.getTotal()
@@ -97,8 +98,35 @@ class InvalidEntryPopUp(customtkinter.CTkToplevel):
         close_btn = customtkinter.CTkButton(self, text="Dismiss", command = self.destroy)
         close_btn.pack(pady = 20)
         
+class SuccessfulEntry(customtkinter.CTkToplevel):
+    def __init__(self, master):
+        super().__init__(master)
+        
+        self.title("Success")
+        self.geometry("300x200")
+        
+        self.attributes("-topmost", True)
+        
+        self.after(200, lambda: self.focus())
+        
+        label = customtkinter.CTkLabel(self, text = "Transaction Added Succesfully")
+        label.pack(pady = 20)
+        
+        close_btn = customtkinter.CTkButton(self, text = "Dismiss", command = self.destroy)
+        close_btn.pack(pady = 20)
         
 #-----------------------------------------------------------------------------------------------------------#
 
 
+class TransactionsLabel(customtkinter.CTkLabel):
+    def __init__(self, master):
+        super().__init__(master)
         
+        transaction_adder = data.manipulateData()
+        all_transactions: str = transaction_adder.read_csv()
+        
+                
+        self.configure(text = all_transactions, height = 50, width = 150, font = ("inter", 15), fg_color = "transparent")
+        
+#-----------------------------------------------------------------------------------------------------------#
+# TODO add a popup so notify the user that a transaction has been added successfully 

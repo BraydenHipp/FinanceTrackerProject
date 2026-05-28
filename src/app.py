@@ -23,5 +23,9 @@ class App(customtkinter.CTk):
         self.observation_frame = frm.NewObservationFrame(self)
         self.observation_frame.grid(row = 1, column = 0, padx = 20, pady = (5, 10), sticky = "nw")
         
+        # Transaction Frame
+        self.transaction_frame = frm.TransactionsFrame(self)
+        self.transaction_frame.grid(row = 0, column = 1, padx = 20, pady = (5, 10), sticky = "ne")
+        
 app = App()
 app.mainloop()
