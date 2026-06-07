@@ -11,18 +11,20 @@ class manipulateData:
     def getTotal(self):
         
         # the .. tells python to go up one level out of the src directory to look for the test folder
-        df = pd.read_csv("../test/data_small.csv") # turns the csv file into a data frame
+        df = pd.read_csv("../test/output.csv") # turns the csv file into a data frame
         
         data = df.to_dict(orient = "records")
+        
+        print(data)
         
         total = 0
         
         for transaction in data:
             transaction_type = transaction["type"]
             amount = transaction["amount"]
-            if (transaction_type == "deposit"):
+            if (transaction_type == "Deposit"):
                 total += amount
-            elif (transaction_type == "withdrawal"):
+            elif (transaction_type == "Withdrawal"):
                 total -= amount
             
         return round(total, 2)
@@ -74,22 +76,23 @@ class manipulateData:
         
         return data
     
-    # TODO add a filepath argument so that you can ask for one on start up
-    def read_csv(self):
+    
+    def display_csv(self):
         
         df = pd.read_csv("../test/output.csv") # turns the csv file into a data frame
         
         data: list = df.to_dict(orient = "records") # converts the csv to a list containing all of the observations
+        data.reverse()
         
         all_transactions: str = ""
-        
+        line_break:str = "-------------------------------------------------"
         for transaction in data:
             type_t: str = transaction["type"]
             amount: str = str(transaction["amount"])
             category: str = str(transaction["category"])
             date: str = transaction["date"]
             
-            all_transactions += type_t + ", " +  amount + ", " + category + ", " + date +  "\n"
+            all_transactions += type_t + ", " +  amount + ", " + category + ", " + date +  "\n" + line_break + "\n"
         
         return all_transactions
     

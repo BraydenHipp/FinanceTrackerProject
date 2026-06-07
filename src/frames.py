@@ -4,7 +4,7 @@ from testDataGenerator import Generator as TGD
 from data import manipulateData as MD
 
 class NewObservationFrame(customtkinter.CTkFrame):
-    def __init__(self, master):
+    def __init__(self, master, update_callback, update_callback_2):
         super().__init__(master,
                          fg_color = "#2B2B2B",
                          border_color = "#404040",
@@ -33,21 +33,26 @@ class NewObservationFrame(customtkinter.CTkFrame):
         observation_adder = MD()
         
         # need to wrap this in a lamda function so that it isn't executed immediately
-        self.add_observation_button = comp.AddObservationButton(
-        self, 
-        command =lambda: observation_adder.get_new_observation_data(
-                                                            self.get_type(),
-                                                            self.get_amount(),
-                                                            self.get_category(),
-                                                            self.get_date(),
-                                                            self
-                                                            )
-                                                            )
+        self.add_observation_button = comp.AddTransactionButton(
+                    self, 
+                    command=lambda: [
+                        observation_adder.get_new_observation_data(
+                            self.get_type(),
+                            self.get_amount(),
+                            self.get_category(),
+                            self.get_date(),
+                            self
+                        ),
+                        update_callback(), # This refreshes the total 
+                        update_callback_2() # This refreshes the observations
+                    ]
+                )
+                
+        self.add_observation_button.grid(row = 5, column = 0, padx = 10, pady = (5, 10), sticky = "ns")     
         
-        self.add_observation_button.grid(row = 5, column = 0, padx = 10, pady = (5, 10), sticky = "ns")        
+        
     
     # Moving the methods oout of the initializer make them actual class methods instead of local ones
-    # TODO add the data parsing 
     def get_type(self):
         return self.type_dropdown.type_variable.get()
     
@@ -83,6 +88,14 @@ class BalanceFrame(customtkinter.CTkFrame):
         # The actual amount        
         self.total = comp.TotalDisplay(self) # pady(t , b) says t pixels above b pixels below 
         self.total.grid(row = 1, column = 0, padx = 20,  pady = (0, 10), sticky = "ns")
+        
+        
+    def update_balance(self):
+        self.total.refresh_total()
+        
+
+
+#-----------------------------------------------------------------------------------------------------------#        
 
 class TransactionsFrame(customtkinter.CTkScrollableFrame):
     def __init__(self, master):
@@ -98,9 +111,6 @@ class TransactionsFrame(customtkinter.CTkScrollableFrame):
         
         self.all_transactions = comp.TransactionsLabel(self)
         self.all_transactions.grid(row = 0, column = 0, padx = 20,  pady = (10,10), sticky = "w")
-    def reload_csv(self):
-        for widget in self.all_transactions.winfo_children():
-            widget.destroy
-        
-            
-    
+
+    def update_transactions(self):
+        self.all_transactions.refresh_transactions()

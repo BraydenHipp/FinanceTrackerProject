@@ -16,16 +16,17 @@ class App(customtkinter.CTk):
         self.grid_rowconfigure(1, weight=50)
         
         # Total Balance Frame
-        self.balance_section = frm.BalanceFrame(self)
-        self.balance_section.grid(row = 0, column = 0, padx = 20, pady = 20, sticky = "nw")
-
-        # New observation frame
-        self.observation_frame = frm.NewObservationFrame(self)
-        self.observation_frame.grid(row = 1, column = 0, padx = 20, pady = (5, 10), sticky = "nw")
-        
+        self.balance_frame = frm.BalanceFrame(self)
+        self.balance_frame.grid(row = 0, column = 0, padx = 20, pady = 20, sticky = "nw")
         # Transaction Frame
         self.transaction_frame = frm.TransactionsFrame(self)
         self.transaction_frame.grid(row = 0, column = 1, padx = 20, pady = (5, 10), sticky = "ne")
+
+        # New observation frame
+        self.observation_frame = frm.NewObservationFrame(self, update_callback = self.balance_frame.update_balance,
+                                                         update_callback_2 = self.transaction_frame.update_transactions)
+        self.observation_frame.grid(row = 1, column = 0, padx = 20, pady = (5, 10), sticky = "nw")
+        
         
 app = App()
 app.mainloop()

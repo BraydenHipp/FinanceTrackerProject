@@ -19,6 +19,13 @@ class TotalDisplay(customtkinter.CTkLabel):
         # To change the font size all you do is font = font (font type, size)
         self.configure(text = total, height = 50, width = 150, font = ("Inter", 35), fg_color="transparent")
         
+        
+    def refresh_total(self): 
+        extractor = data.manipulateData()
+        total = extractor.getTotal()
+
+        self.configure(text = total)
+        
 #-----------------------------------------------------------------------------------------------------------#
 
 
@@ -71,7 +78,7 @@ class ObservationDate(customtkinter.CTkEntry):
                          textvariable = self.date_variable)
         
 
-class AddObservationButton(customtkinter.CTkButton):
+class AddTransactionButton(customtkinter.CTkButton):
     def __init__(self, master, command = None):
     
         super().__init__(master,
@@ -123,10 +130,17 @@ class TransactionsLabel(customtkinter.CTkLabel):
         super().__init__(master)
         
         transaction_adder = data.manipulateData()
-        all_transactions: str = transaction_adder.read_csv()
+        all_transactions: str = transaction_adder.display_csv()
         
                 
         self.configure(text = all_transactions, height = 50, width = 150, font = ("inter", 15), fg_color = "transparent")
         
+        
+    def refresh_transactions(self):
+        
+        transaction_adder = data.manipulateData()
+        all_transactions: str = transaction_adder.display_csv()
+        
+        self.configure(text = all_transactions)        
 #-----------------------------------------------------------------------------------------------------------#
-# TODO add a popup so notify the user that a transaction has been added successfully 
+
