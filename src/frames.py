@@ -9,7 +9,9 @@ class NewObservationFrame(customtkinter.CTkFrame):
                          fg_color = "#2B2B2B",
                          border_color = "#404040",
                          border_width = 2,
-                         corner_radius = 10
+                         corner_radius = 10,
+                         width = 400,
+                         height = 1000
                          )
         
         self.observation_label = comp.ObservationLabel(self)
@@ -69,7 +71,7 @@ class NewObservationFrame(customtkinter.CTkFrame):
             
         
 #-----------------------------------------------------------------------------------------------------------#        
-            
+# TODO add two subheaders that display the total deposits vs withdrawls  
 class BalanceFrame(customtkinter.CTkFrame):
     def __init__(self, master):
         super().__init__(
@@ -114,3 +116,21 @@ class TransactionsFrame(customtkinter.CTkScrollableFrame):
 
     def update_transactions(self):
         self.all_transactions.refresh_transactions()
+    
+
+
+#-----------------------------------------------------------------------------------------------------------#        
+
+
+class PieChartFrame(customtkinter.CTkFrame):
+    def __init__(self, master):
+        super().__init__(master,
+                         fg_color = "#2B2B2B",
+                        border_color = "#404040",
+                        border_width = 2,
+                        corner_radius = 10,
+                        width = 527,
+                        height = 400
+                        )
+        
+        

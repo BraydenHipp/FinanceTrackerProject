@@ -15,7 +15,6 @@ class manipulateData:
         
         data = df.to_dict(orient = "records")
         
-        print(data)
         
         total = 0
         
