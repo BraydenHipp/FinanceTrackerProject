@@ -29,7 +29,43 @@ class manipulateData:
         return round(total, 2)
     
     
-    # TODO Write a method to count the total amounts for each of the categories
+    # This function counts the total amount of deposits
+    def getDeposits(self):
+        
+        df = pd.read_csv("../test/output.csv")
+        data = df.to_dict(orient = "records")
+        
+        total: int = 0
+        
+        for transaction in data:
+            
+            transaction_type: str = transaction["type"]
+            amount: int = transaction["amount"]
+            
+            if (transaction_type == "Deposit"):
+                total += amount
+                
+        return round(total, 2)
+    
+    def getWithdrawals(self):
+                
+        df = pd.read_csv("../test/output.csv")
+        data = df.to_dict(orient = "records")
+        
+        total: int = 0
+        
+        for transaction in data:
+            
+            transaction_type: str = transaction["type"]
+            amount: int = transaction["amount"]
+            
+            if (transaction_type == "Withdrawal"):
+                total += amount
+                
+        return round(total, 2)
+        
+        
+    # This method counts the total number of each type of transactions
     
     def count_total(self):
         df = pd.read_csv("../test/output.csv", keep_default_na = False)
@@ -84,14 +120,15 @@ class manipulateData:
         data.reverse()
         
         all_transactions: str = ""
-        line_break:str = "-------------------------------------------------"
+        margin:str = "           "
+        line_break:str = margin + "-------------------------------------------------"
         for transaction in data:
             type_t: str = transaction["type"]
             amount: str = str(transaction["amount"])
             category: str = str(transaction["category"])
             date: str = transaction["date"]
             
-            all_transactions += type_t + ", " +  amount + ", " + category + ", " + date +  "\n" + line_break + "\n"
+            all_transactions += margin + type_t + ", " +  amount + ", " + category + ", " + date +  "\n" + line_break + "\n"
         
         return all_transactions
     

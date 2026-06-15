@@ -26,6 +26,52 @@ class TotalDisplay(customtkinter.CTkLabel):
 
         self.configure(text = total)
         
+
+class TotalWithdrawalsHeader(customtkinter.CTkLabel):
+    def __init__(self, master):
+        super().__init__(master)
+        
+        self.configure(text = "Withdrawals:", height = 25, width = 50, font = ("Inter", 15), fg_color = "transparent")        
+        
+        
+class TotalWithdrawals(customtkinter.CTkLabel):
+    def __init__(self, master):
+        super().__init__(master)
+        
+        extractor = data.manipulateData()
+        total_withdrawals: float = extractor.getWithdrawals()
+        
+        self.configure(text = total_withdrawals, height = 25, width = 50, font = ("Inter", 15), fg_color = "transparent", text_color = "red")
+        
+    def refresh_withdrawals(self):
+        extractor = data.manipulateData()
+        withdrawal_total = extractor.getWithdrawals()
+        
+        self.configure(text = withdrawal_total)
+        
+class TotalDepositsHeader(customtkinter.CTkLabel):
+    def __init__(self, master):
+        super().__init__(master)
+        
+        self.configure(text = "Deposits:", height = 25, width = 50, font = ("Inter", 15), fg_color = "transparent")
+            
+class TotalDeposits(customtkinter.CTkLabel):
+    def __init__(self, master):
+        super().__init__(master)
+        
+        extractor = data.manipulateData()
+        total_deposits: float = extractor.getDeposits()
+        
+        self.configure(text = total_deposits, height = 25, width = 50, font = ("Inter", 15), fg_color = "transparent", text_color = "green")
+        
+    def refresh_deposits(self):
+        
+        extractor = data.manipulateData()
+        total_deposits: float = extractor.getDeposits()
+        
+        self.configure(text = total_deposits)
+        
+
 #-----------------------------------------------------------------------------------------------------------#
 
 
@@ -62,7 +108,7 @@ class ObservationCategory(customtkinter.CTkOptionMenu):
         super().__init__(master,
                          values = ["Housing/Utilities",
                                    "Food/Dining",
-                                   "Transportatoin",
+                                   "Transportation",
                                    "Medical",
                                    "Entertainment/Leisure",
                                    "Personal Care/Shopping",

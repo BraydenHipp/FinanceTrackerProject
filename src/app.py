@@ -24,7 +24,9 @@ class App(customtkinter.CTk):
 
         # New observation frame
         self.observation_frame = frm.NewObservationFrame(self, update_callback = self.balance_frame.update_balance,
-                                                         update_callback_2 = self.transaction_frame.update_transactions)
+                                                         update_callback_2 = self.transaction_frame.update_transactions,
+                                                         update_callback_3 = self.balance_frame.update_withdrawals,
+                                                         update_callback_4 = self.balance_frame.update_deposits)
         self.observation_frame.grid(row = 1, column = 0, padx = 20, pady = (5, 10), sticky = "ns")
         
         # Pie Chart Frame

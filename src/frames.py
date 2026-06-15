@@ -4,7 +4,7 @@ from testDataGenerator import Generator as TGD
 from data import manipulateData as MD
 
 class NewObservationFrame(customtkinter.CTkFrame):
-    def __init__(self, master, update_callback, update_callback_2):
+    def __init__(self, master, update_callback, update_callback_2, update_callback_3, update_callback_4):
         super().__init__(master,
                          fg_color = "#2B2B2B",
                          border_color = "#404040",
@@ -46,7 +46,9 @@ class NewObservationFrame(customtkinter.CTkFrame):
                             self
                         ),
                         update_callback(), # This refreshes the total 
-                        update_callback_2() # This refreshes the observations
+                        update_callback_2(), # This refreshes the observations
+                        update_callback_3(), # This refreshes the total withdrawals
+                        update_callback_4() # This refreshes the total deposits 
                     ]
                 )
                 
@@ -71,7 +73,7 @@ class NewObservationFrame(customtkinter.CTkFrame):
             
         
 #-----------------------------------------------------------------------------------------------------------#        
-# TODO add two subheaders that display the total deposits vs withdrawls  
+
 class BalanceFrame(customtkinter.CTkFrame):
     def __init__(self, master):
         super().__init__(
@@ -91,9 +93,31 @@ class BalanceFrame(customtkinter.CTkFrame):
         self.total = comp.TotalDisplay(self) # pady(t , b) says t pixels above b pixels below 
         self.total.grid(row = 1, column = 0, padx = 20,  pady = (0, 10), sticky = "ns")
         
+        # The total withdrawals header
+        self.withdrawal_header = comp.TotalWithdrawalsHeader(self)
+        self.withdrawal_header.grid(row = 2, column = 0, padx = 20, pady = (10, 0), sticky = "sw")
+        
+        # The total withdrawls amount
+        self.withdrawal_amount = comp.TotalWithdrawals(self)
+        self.withdrawal_amount.grid(row = 3, column = 0, padx = (35, 0), pady = (10,0), sticky = "sw")
+        
+        # The total deposit Header
+        self.deposit_header = comp.TotalDepositsHeader(self)
+        self.deposit_header.grid(row = 2, column = 0, padx = (10, 20), pady = (10, 0), sticky = "se")
+        
+        # The total deposits amount
+        self.deposit_amount = comp.TotalDeposits(self)
+        self.deposit_amount.grid(row = 3, column = 0, padx = (10, 20), pady = (10, 0), sticky = "se")
+        
         
     def update_balance(self):
         self.total.refresh_total()
+        
+    def update_withdrawals(self):
+        self.withdrawal_amount.refresh_withdrawals()
+        
+    def update_deposits(self):
+        self.deposit_amount.refresh_deposits()
         
 
 

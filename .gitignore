@@ -1,8 +1,7 @@
-src/__pycache__/components.cpython-314.pyc
-src/__pycache__/data.cpython-314.pyc
-src/__pycache__/frames.cpython-314.pyc
 CTkPieChart-main/
 .vscode/
 .venv/
-__pycache__
 .DS_Store
+__pycache__/
+__pycache__/app.cpython-314.pyc
+
