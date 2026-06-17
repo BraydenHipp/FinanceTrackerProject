@@ -17,7 +17,7 @@ class Generator:
                "July", "August" , "September", "October", "November", "December"]
 
     
-    # TODO Change it so the months are numbers
+
     
     months_to_days = {"January" : 31, 
                       "February" : 28,

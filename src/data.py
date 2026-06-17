@@ -71,6 +71,7 @@ class manipulateData:
         df = pd.read_csv("../test/output.csv", keep_default_na = False)
         
         data = df.to_dict(orient = "records")
+        print(data)
         # Define the dictoinary
         frequency: dict = {
         "Housing/Utilities" : 0,
@@ -84,7 +85,8 @@ class manipulateData:
         }
         
         for observation in data:
-            frequency[observation] += 1
+            transaction_type: str = observation["category"]
+            frequency[transaction_type] += 1
             
         return frequency
     
@@ -142,7 +144,6 @@ class manipulateData:
             comp.InvalidEntryPopUp(parent_ui, "Amount")
             return
             
-        # TODO need to add the date parsing which is gonna suck
         
         unprocessed_date: str = date
         
@@ -203,7 +204,6 @@ class manipulateData:
         
         current_month: str = months[int_month - 1]
         max_days: int = months_to_days[current_month]
-        
         
         
         if int_day > max_days or int_day < 1:

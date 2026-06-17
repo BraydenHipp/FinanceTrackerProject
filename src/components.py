@@ -1,6 +1,10 @@
 import customtkinter
 import data
 import pandas as pd
+from testDataGenerator import Generator as TGD
+
+
+
 class TotalBalanceLabel(customtkinter.CTkLabel): # inheritance (new label has all features of regular label)
     def __init__(self, master):
         super().__init__(master) # this initializes the parent class label

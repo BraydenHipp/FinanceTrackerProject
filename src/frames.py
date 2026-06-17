@@ -2,7 +2,11 @@ import customtkinter
 import components as comp
 from testDataGenerator import Generator as TGD
 from data import manipulateData as MD
+import matplotlib.pyplot as plt
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
+
+# TODO need to adjust the frames so everything fits
 class NewObservationFrame(customtkinter.CTkFrame):
     def __init__(self, master, update_callback, update_callback_2, update_callback_3, update_callback_4):
         super().__init__(master,
@@ -145,16 +149,53 @@ class TransactionsFrame(customtkinter.CTkScrollableFrame):
 
 #-----------------------------------------------------------------------------------------------------------#        
 
-
+# TODO Need to make it so if the frequency is 0 it doesn't shop up on the pie chart
+# TODO Need to make it so it refreshes on added transaction
 class PieChartFrame(customtkinter.CTkFrame):
-    def __init__(self, master):
+    def __init__(self, master, **kkwargs):
         super().__init__(master,
                          fg_color = "#2B2B2B",
                         border_color = "#404040",
                         border_width = 2,
                         corner_radius = 10,
                         width = 527,
-                        height = 400
+                        height = 400,
+                        **kkwargs
                         )
+        
+        # Pull data from your data module (adjust to your actual implementation)
+        
+        #         category = ["Housing/Utilities", "Food/Dining", "Transportation",
+        #         "Medical", "Entertainment/Leisure", "Personal Care/Shopping",
+        #         "Other", "N/A"]
+    
+
+        self.labels = TGD.category
+        manipulator = MD()
+        frequencies = manipulator.count_total()
+        self.sizes = [frequencies["Housing/Utilities"], frequencies["Food/Dining"], frequencies["Transportation"], frequencies["Medical"],
+                                 frequencies["Entertainment/Leisure"], frequencies["Personal Care/Shopping"], frequencies["Other"], 
+                                 frequencies["N/A"]]
+        self.colors = ['#ff9999', '#66b3ff', '#99ff99', '#ffcc99', "#ff0000", "#007cf8", "#00fd00", "#ff7f00"]
+        
+        self.create_pie_chart()
+
+    def create_pie_chart(self):
+        fig, ax = plt.subplots(figsize=(4, 3), facecolor='#2b2b2b') 
+        ax.pie(
+            self.sizes, 
+            labels=self.labels, 
+            autopct='%1.1f%%', 
+            startangle=90, 
+            colors=self.colors,
+            textprops={"color": "black", "fontsize": 5}
+        )
+        ax.axis('equal')
+        
+        # Target this frame as the master
+        self.canvas = FigureCanvasTkAgg(fig, master=self)
+        canvas_widget = self.canvas.get_tk_widget()
+        canvas_widget.pack(pady=10, padx=10, fill="both", expand=True)
+        self.canvas.draw()
         
         
