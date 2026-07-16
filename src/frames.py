@@ -6,9 +6,9 @@ import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 
-# TODO need to adjust the frames so everything fits
+
 class NewObservationFrame(customtkinter.CTkFrame):
-    def __init__(self, master, update_callback, update_callback_2, update_callback_3, update_callback_4):
+    def __init__(self, master, update_callback, update_callback_2, update_callback_3, update_callback_4, update_callback_5):
         super().__init__(master,
                          fg_color = "#2B2B2B",
                          border_color = "#404040",
@@ -52,7 +52,8 @@ class NewObservationFrame(customtkinter.CTkFrame):
                         update_callback(), # This refreshes the total 
                         update_callback_2(), # This refreshes the observations
                         update_callback_3(), # This refreshes the total withdrawals
-                        update_callback_4() # This refreshes the total deposits 
+                        update_callback_4(), # This refreshes the total deposits 
+                        update_callback_5() # This refreshes the piechart
                     ]
                 )
                 
@@ -149,53 +150,68 @@ class TransactionsFrame(customtkinter.CTkScrollableFrame):
 
 #-----------------------------------------------------------------------------------------------------------#        
 
-# TODO Need to make it so if the frequency is 0 it doesn't shop up on the pie chart
-# TODO Need to make it so it refreshes on added transaction
+
 class PieChartFrame(customtkinter.CTkFrame):
-    def __init__(self, master, **kkwargs):
+    def __init__(self, master, **kwargs):
         super().__init__(master,
-                         fg_color = "#2B2B2B",
-                        border_color = "#404040",
-                        border_width = 2,
-                        corner_radius = 10,
-                        width = 527,
-                        height = 400,
-                        **kkwargs
-                        )
+                         fg_color="#2B2B2B",
+                         border_color="#404040",
+                         border_width=2,
+                         corner_radius=10,
+                         width=800,
+                         height=400,
+                         **kwargs,
+                         )
         
-        # Pull data from your data module (adjust to your actual implementation)
         
-        #         category = ["Housing/Utilities", "Food/Dining", "Transportation",
-        #         "Medical", "Entertainment/Leisure", "Personal Care/Shopping",
-        #         "Other", "N/A"]
-    
-
         self.labels = TGD.category
-        manipulator = MD()
-        frequencies = manipulator.count_total()
-        self.sizes = [frequencies["Housing/Utilities"], frequencies["Food/Dining"], frequencies["Transportation"], frequencies["Medical"],
-                                 frequencies["Entertainment/Leisure"], frequencies["Personal Care/Shopping"], frequencies["Other"], 
-                                 frequencies["N/A"]]
-        self.colors = ['#ff9999', '#66b3ff', '#99ff99', '#ffcc99', "#ff0000", "#007cf8", "#00fd00", "#ff7f00"]
+        # Remove the NA category so that that pie chart only tracks withdrawls and not deposits which default to N/A
+        self.labels.pop()
+        self.manipulator = MD()
+        self.colors = ["#ff9999", "#66b3ff", "#f200de", "#ffcc99", "#ff0000", "#007cf8", "#00fd008c"]
         
-        self.create_pie_chart()
+        
+        self.fig, self.ax = plt.subplots(figsize=(2.55, 3), facecolor="#2b2b2b") 
+        self.canvas = FigureCanvasTkAgg(self.fig, master=self)
+        self.canvas_widget = self.canvas.get_tk_widget()
+        self.canvas_widget.pack(pady=10, padx=10, fill="both", expand=True)
 
-    def create_pie_chart(self):
-        fig, ax = plt.subplots(figsize=(4, 3), facecolor='#2b2b2b') 
-        ax.pie(
-            self.sizes, 
-            labels=self.labels, 
-            autopct='%1.1f%%', 
-            startangle=90, 
-            colors=self.colors,
-            textprops={"color": "black", "fontsize": 5}
-        )
-        ax.axis('equal')
         
-        # Target this frame as the master
-        self.canvas = FigureCanvasTkAgg(fig, master=self)
-        canvas_widget = self.canvas.get_tk_widget()
-        canvas_widget.pack(pady=10, padx=10, fill="both", expand=True)
+        self.refresh_pie_chart()
+
+    def refresh_pie_chart(self):
+        
+        frequencies = self.manipulator.count_total()
+        sizes = [frequencies["Housing/Utilities"], frequencies["Food/Dining"], frequencies["Transportation"], 
+                 frequencies["Medical"], frequencies["Entertainment/Leisure"], frequencies["Personal Care/Shopping"], 
+                 frequencies["Other"]]
+        
+        filtered_labels = []
+        filtered_sizes = []
+        filtered_colors = []
+        
+        
+        for i in range(len(sizes)):
+            if sizes[i] != 0:
+                filtered_labels.append(self.labels[i])
+                filtered_sizes.append(sizes[i])
+                filtered_colors.append(self.colors[i])
+        
+        
+        self.ax.clear()
+        
+        
+        if filtered_sizes:
+            self.ax.pie(
+                filtered_sizes, 
+                labels=filtered_labels, 
+                autopct="%1.1f%%", 
+                startangle=90, 
+                colors=filtered_colors,
+                textprops={"color": "#FFFFFF" , "fontsize": 5,}
+            )
+            self.ax.axis("equal")
+        
+        
         self.canvas.draw()
-        
         

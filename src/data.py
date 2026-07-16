@@ -71,7 +71,7 @@ class manipulateData:
         df = pd.read_csv("../test/output.csv", keep_default_na = False)
         
         data = df.to_dict(orient = "records")
-        print(data)
+        
         # Define the dictoinary
         frequency: dict = {
         "Housing/Utilities" : 0,
@@ -81,12 +81,24 @@ class manipulateData:
             "Entertainment/Leisure" : 0,
             "Personal Care/Shopping" : 0,
             "Other" : 0,
-            "N/A" : 0
+            "N/A(Deposit)" : 0
         }
+        
+        total_withdrawals: int = self.getWithdrawals()
         
         for observation in data:
             transaction_type: str = observation["category"]
-            frequency[transaction_type] += 1
+            frequency[transaction_type] += observation["amount"]
+        
+        
+        frequency["Housing/Utilities"] = frequency["Housing/Utilities"] / total_withdrawals
+        frequency["Food/Dining"] = frequency["Food/Dining"] / total_withdrawals
+        frequency["Transportation"] = frequency["Transportation"] / total_withdrawals
+        frequency["Medical"] = frequency["Medical"] / total_withdrawals
+        frequency["Entertainment/Leisure"] = frequency["Entertainment/Leisure"] / total_withdrawals
+        frequency["Personal Care/Shopping"] = frequency["Personal Care/Shopping"] / total_withdrawals
+        frequency["Other"] = frequency["Other"] / total_withdrawals
+        frequency["N/A(Deposit)"] = frequency["N/A(Deposit)"] / total_withdrawals
             
         return frequency
     

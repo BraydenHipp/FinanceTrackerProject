@@ -1,7 +1,11 @@
 import customtkinter
 import data
 import frames as frm
- 
+
+
+
+# FIXME make it so when pressing the dismiss button on the pop ups it actually closes
+# TODO add a popup to stop a deposit from being added if it is not a 'N/A Depost'
 class App(customtkinter.CTk):
     def __init__(self):
         super().__init__()
@@ -22,16 +26,21 @@ class App(customtkinter.CTk):
         self.transaction_frame = frm.TransactionsFrame(self)
         self.transaction_frame.grid(row = 0, column = 1, padx = 20, pady = (5, 10), sticky = "ne")
 
-        # New observation frame
-        self.observation_frame = frm.NewObservationFrame(self, update_callback = self.balance_frame.update_balance,
-                                                         update_callback_2 = self.transaction_frame.update_transactions,
-                                                         update_callback_3 = self.balance_frame.update_withdrawals,
-                                                         update_callback_4 = self.balance_frame.update_deposits)
-        self.observation_frame.grid(row = 1, column = 0, padx = 20, pady = (5, 10), sticky = "ns")
         
         # Pie Chart Frame
         self.pie_chart_frame = frm.PieChartFrame(self)
         self.pie_chart_frame.grid(row = 1, column = 1, padx = 20, pady = (5, 10), sticky = "se")
+        
+        # New observation frame
+        self.observation_frame = frm.NewObservationFrame(self, update_callback = self.balance_frame.update_balance,
+                                                         update_callback_2 = self.transaction_frame.update_transactions,
+                                                         update_callback_3 = self.balance_frame.update_withdrawals,
+                                                         update_callback_4 = self.balance_frame.update_deposits,
+                                                         update_callback_5 = self.pie_chart_frame.refresh_pie_chart)
+        self.observation_frame.grid(row = 1, column = 0, padx = 20, pady = (5, 10), sticky = "ns")
+        
+        
+        
         
 app = App()
 app.mainloop()

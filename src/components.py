@@ -66,7 +66,7 @@ class TotalDeposits(customtkinter.CTkLabel):
         extractor = data.manipulateData()
         total_deposits: float = extractor.getDeposits()
         
-        self.configure(text = total_deposits, height = 25, width = 50, font = ("Inter", 15), fg_color = "transparent", text_color = "green")
+        self.configure(text = total_deposits, height = 25, width = 50, font = ("Inter", 15), fg_color = "transparent", text_color = "#60e806")
         
     def refresh_deposits(self):
         
@@ -117,7 +117,7 @@ class ObservationCategory(customtkinter.CTkOptionMenu):
                                    "Entertainment/Leisure",
                                    "Personal Care/Shopping",
                                    "Other",
-                                   "N/A"],
+                                   "N/A(Deposit)"],
                          variable = self.category_variable
                         )
 class ObservationDate(customtkinter.CTkEntry):
