@@ -86,6 +86,10 @@ class manipulateData:
         
         total_withdrawals: int = self.getWithdrawals()
         
+        if (total_withdrawals == 0):
+            return frequency
+        
+        
         for observation in data:
             transaction_type: str = observation["category"]
             frequency[transaction_type] += observation["amount"]
@@ -148,12 +152,17 @@ class manipulateData:
     
     def get_new_observation_data(self, type_t, amount, category, date, parent_ui):
 
+        if (type_t == "Deposit" and category != "N/A(Deposit)"):
+            comp.mismatchTypePopUp(parent_ui)
+            return
+
         unprocessed_amount = amount
         try:
             processed_amount = float(unprocessed_amount)
             processed_amount = round(processed_amount, 2)
         except ValueError:
             comp.InvalidEntryPopUp(parent_ui, "Amount")
+            
             return
             
         

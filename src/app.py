@@ -1,11 +1,10 @@
 import customtkinter
 import data
 import frames as frm
+from data import manipulateData as MD
 
-
-
-# FIXME make it so when pressing the dismiss button on the pop ups it actually closes
-# TODO add a popup to stop a deposit from being added if it is not a 'N/A Depost'
+# TODO make it so there is a place holder pie chart when the csv is empty
+# TODO change output.csv to data.csv 
 class App(customtkinter.CTk):
     def __init__(self):
         super().__init__()
@@ -28,8 +27,11 @@ class App(customtkinter.CTk):
 
         
         # Pie Chart Frame
+            
+        
         self.pie_chart_frame = frm.PieChartFrame(self)
         self.pie_chart_frame.grid(row = 1, column = 1, padx = 20, pady = (5, 10), sticky = "se")
+        
         
         # New observation frame
         self.observation_frame = frm.NewObservationFrame(self, update_callback = self.balance_frame.update_balance,

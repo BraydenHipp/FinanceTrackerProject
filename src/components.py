@@ -152,8 +152,6 @@ class InvalidEntryPopUp(customtkinter.CTkToplevel):
         label = customtkinter.CTkLabel(self, text = "Please Enter A Valid " + type)
         label.pack(pady = 20)
         
-        close_btn = customtkinter.CTkButton(self, text="Dismiss", command = self.destroy)
-        close_btn.pack(pady = 20)
         
 class SuccessfulEntry(customtkinter.CTkToplevel):
     def __init__(self, master):
@@ -168,10 +166,20 @@ class SuccessfulEntry(customtkinter.CTkToplevel):
         
         label = customtkinter.CTkLabel(self, text = "Transaction Added Succesfully")
         label.pack(pady = 20)
-        
-        close_btn = customtkinter.CTkButton(self, text = "Dismiss", command = self.destroy)
-        close_btn.pack(pady = 20)
-        
+    
+class mismatchTypePopUp(customtkinter.CTkToplevel):
+    def __init__(self, master):
+         super().__init__(master)       
+         
+         self.title("Error Message")
+         self.geometry("300x200")
+         
+         self.attributes("-topmost", True)
+         
+         self.after(200, lambda: self.focus())
+         
+         label = customtkinter.CTkLabel(self, text = "Deposit must have category 'N/A(Deposit)")
+         label.pack(pady=20) 
 #-----------------------------------------------------------------------------------------------------------#
 
 
